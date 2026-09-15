@@ -89,7 +89,7 @@ Pesquisa aplicada, de caráter quantitativo e experimental, dividida em três fr
 Sifilis congenita/
 ├── README.md
 ├── DNSP20XX.csv                 # SINASC — nascidos vivos (2015-2024)
-├── SIFCBR20XX.csv               # SINAN — sífilis congênita (2015-2025, exceto 2022)
+├── SIFCBR20XX.csv               # SINAN — sífilis congênita (2015-2025)
 ├── Lucas_-_Plano_de_Trabalho_...pdf     # plano de trabalho (modelo preditivo)
 └── Plano_de_trabalho_Eduarda_Oliveira.pdf  # plano de trabalho (banco de dados/pipeline)
 ```
