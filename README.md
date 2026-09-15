@@ -61,8 +61,8 @@ Os dados utilizados são públicos, disponibilizados pelo Ministério da Saúde 
 
 | Base | Sistema | Conteúdo | Arquivos neste repositório |
 |---|---|---|---|
-| **DNSP** | SINASC — Sistema de Informações sobre Nascidos Vivos | Declarações de Nascidos Vivo (DN): idade materna, escolaridade, pré-natal, gestação, parto, peso, Apgar etc. | `DNSP2015.csv` a `DNSP2024.csv` |
-| **SIFCBR** | SINAN — Sistema de Informação de Agravos de Notificação | Notificações de sífilis congênita: diagnóstico, exames laboratoriais, tratamento, evolução do caso. | `SIFCBR15.csv` a `SIFCBR25.csv` (falta 2022) |
+| **DNSP** | SINASC — Sistema de Informações sobre Nascidos Vivos | Declarações de Nascidos Vivo (DN): idade materna, escolaridade, pré-natal, gestação, parto, peso, Apgar etc. | `DNSP2015` a `DNSP2024` |
+| **SIFCBR** | SINAN — Sistema de Informação de Agravos de Notificação | Notificações de sífilis congênita: diagnóstico, exames laboratoriais, tratamento, evolução do caso. | `SIFCBR15` a `SIFCBR25`  |
 
 > **Atenção:** os arquivos CSV são bases brutas do DATASUS, pesam entre ~2 MB e ~140 MB cada e não devem ser versionados em um repositório Git (ver `.gitignore`). Ainda que os dados sejam públicos e anonimizados, recomenda-se tratá-los com o mesmo cuidado de dados sensíveis de saúde durante o desenvolvimento.
 
