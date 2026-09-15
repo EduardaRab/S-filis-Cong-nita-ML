@@ -1,0 +1,23 @@
+# Dados brutos do DATASUS (arquivos grandes, não versionar)
+*.csv
+
+# Documentos com dados pessoais sensíveis (CPF, RG, endereço, telefone)
+*.pdf
+
+# Ambiente Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Configuração local / segredos
+.env
