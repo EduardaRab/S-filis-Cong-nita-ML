@@ -38,8 +38,6 @@ O projeto guarda-chuva se divide em três planos de trabalho complementares:
 2. **Desenvolvimento de Banco de Dados com Arquitetura Adaptável para Sífilis Congênita** (Eduarda) — construção do pipeline de engenharia de dados (ETL/ELT) que extrai, limpa, padroniza e armazena os dados públicos que alimentam o modelo preditivo.
 3. **Calibração Contextual de API Preditiva de Sífilis Congênita a partir de Dados Agregados de Vigilância** (Ester) — fundamentação epidemiológica do projeto: revisão sistemática de fatores de risco populacionais, análise de completude/consistência das variáveis do SINAN (2015–2025) e definição de indicadores agregados com limiares de alerta (verde/amarelo/vermelho) que orientam o preenchimento do arquivo de configuração da API.
 
-> **Nota sobre a Naylla:** seu plano de trabalho — *"Telemonitoramento para Apoio ao Aleitamento Materno e Cuidados com o Recém-Nascido nos Primeiros Seis Meses de Vida"* — pertence a um **projeto de pesquisa diferente** da mesma coordenadora (Profª Grace Pfaffenbach), sobre acompanhamento remoto de puérperas e amamentação. Não tem relação temática com sífilis congênita, com as bases DATASUS/SINAN ou com o modelo preditivo deste repositório; está listada aqui por fazer parte do mesmo grupo de pesquisa/orientação.
-
 ## Resumo
 
 A sífilis congênita é um relevante problema de saúde pública, apesar de ser uma condição amplamente evitável com diagnóstico precoce e tratamento adequado no pré-natal. A transmissão vertical, decorrente de infecção materna não tratada ou tratada de forma inadequada, pode levar a abortamento, natimortalidade, prematuridade e sequelas neonatais.
