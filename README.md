@@ -8,6 +8,8 @@
 Projeto de Iniciação Científica (IC) — Universidade São Francisco (USF), campus Itatiba/Sagrado.
 Edital 2026/2027.
 
+> 📄 Para o detalhamento completo (dicionário de dados campo a campo, metodologia passo a passo, arquitetura proposta, glossário etc.), veja a [Documentação Técnica](DOCUMENTACAO_TECNICA.md).
+
 ## Sumário
 
 - [Equipe](#equipe)
@@ -27,11 +29,16 @@ Edital 2026/2027.
 | Colaboradora | Profª Msc. Débora Meyhofer Ferreira |
 | Aluno de IC — Modelo Preditivo | Lucas Marques Custodio (Eng. Computação, Itatiba) |
 | Aluna de IC — Engenharia de Dados | Eduarda Rabelo Oliveira (Eng. Computação, Sagrado) |
+| Aluna de IC — Fundamentação Epidemiológica | Ester França Simenes (Enfermagem, Sagrado Coração) |
+| Aluna de IC — Pesquisa relacionada (projeto distinto) | Naylla Gabriely Silva Fernandes (Enfermagem, Sagrado Coração) |
 
-O projeto guarda-chuva se divide em dois planos de trabalho complementares:
+O projeto guarda-chuva se divide em três planos de trabalho complementares:
 
 1. **Desenvolvimento de Modelo Preditivo com Arquitetura Adaptável para Sífilis Congênita** (Lucas) — construção e avaliação de modelos de aprendizado de máquina para estimar risco de sífilis congênita, com arquitetura configurável externamente (algoritmo, variáveis e hiperparâmetros definidos por arquivo de configuração, sem alterar o código-fonte).
 2. **Desenvolvimento de Banco de Dados com Arquitetura Adaptável para Sífilis Congênita** (Eduarda) — construção do pipeline de engenharia de dados (ETL/ELT) que extrai, limpa, padroniza e armazena os dados públicos que alimentam o modelo preditivo.
+3. **Calibração Contextual de API Preditiva de Sífilis Congênita a partir de Dados Agregados de Vigilância** (Ester) — fundamentação epidemiológica do projeto: revisão sistemática de fatores de risco populacionais, análise de completude/consistência das variáveis do SINAN (2015–2025) e definição de indicadores agregados com limiares de alerta (verde/amarelo/vermelho) que orientam o preenchimento do arquivo de configuração da API.
+
+> **Nota sobre a Naylla:** seu plano de trabalho — *"Telemonitoramento para Apoio ao Aleitamento Materno e Cuidados com o Recém-Nascido nos Primeiros Seis Meses de Vida"* — pertence a um **projeto de pesquisa diferente** da mesma coordenadora (Profª Grace Pfaffenbach), sobre acompanhamento remoto de puérperas e amamentação. Não tem relação temática com sífilis congênita, com as bases DATASUS/SINAN ou com o modelo preditivo deste repositório; está listada aqui por fazer parte do mesmo grupo de pesquisa/orientação.
 
 ## Resumo
 
@@ -53,6 +60,7 @@ Este projeto propõe o desenvolvimento e a avaliação de modelos preditivos de 
 - Desenvolvimento da arquitetura adaptável por configuração externa (seleção de algoritmo, variáveis e hiperparâmetros via arquivo de configuração).
 - Avaliação de desempenho com métricas de classificação: acurácia, precisão, recall, F1-score e área sob a curva ROC.
 - Aplicação de técnicas de interpretabilidade (importância de variáveis) para relacionar resultados a fatores epidemiológicos conhecidos.
+- Definição de indicadores epidemiológicos agregados (ex.: cobertura de pré-natal, tratamento de parceiros, vulnerabilidade social, oportunidade da notificação) e seus limiares de alerta, para calibrar o arquivo de configuração da API (Ester).
 - Documentação do sistema e dos resultados, com produção de relatórios técnicos e possível publicação científica.
 
 ## Dados
@@ -62,7 +70,7 @@ Os dados utilizados são públicos, disponibilizados pelo Ministério da Saúde 
 | Base | Sistema | Conteúdo | Arquivos neste repositório |
 |---|---|---|---|
 | **DNSP** | SINASC — Sistema de Informações sobre Nascidos Vivos | Declarações de Nascidos Vivo (DN): idade materna, escolaridade, pré-natal, gestação, parto, peso, Apgar etc. | `DNSP2015` a `DNSP2024` |
-| **SIFCBR** | SINAN — Sistema de Informação de Agravos de Notificação | Notificações de sífilis congênita: diagnóstico, exames laboratoriais, tratamento, evolução do caso. | `SIFCBR15` a `SIFCBR25`  |
+| **SIFCBR** | SINAN — Sistema de Informação de Agravos de Notificação | Notificações de sífilis congênita: diagnóstico, exames laboratoriais, tratamento, evolução do caso. | `SIFCBR15` a `SIFCBR25` |
 
 > **Atenção:** os arquivos CSV são bases brutas do DATASUS, pesam entre ~2 MB e ~140 MB cada e não devem ser versionados em um repositório Git (ver `.gitignore`). Ainda que os dados sejam públicos e anonimizados, recomenda-se tratá-los com o mesmo cuidado de dados sensíveis de saúde durante o desenvolvimento.
 
@@ -88,10 +96,14 @@ Pesquisa aplicada, de caráter quantitativo e experimental, dividida em três fr
 ```
 Sifilis congenita/
 ├── README.md
+├── DOCUMENTACAO_TECNICA.md      # detalhamento completo (dicionário de dados, arquitetura, cronograma)
+├── .gitignore                   # exclui CSVs e PDFs (dados brutos e pessoais) do controle de versão
 ├── DNSP20XX.csv                 # SINASC — nascidos vivos (2015-2024)
 ├── SIFCBR20XX.csv               # SINAN — sífilis congênita (2015-2025)
-├── Lucas_-_Plano_de_Trabalho_...pdf     # plano de trabalho (modelo preditivo)
-└── Plano_de_trabalho_Eduarda_Oliveira.pdf  # plano de trabalho (banco de dados/pipeline)
+├── Lucas_-_Plano_de_Trabalho_...pdf         # plano de trabalho (modelo preditivo)
+├── Plano_de_trabalho_Eduarda_Oliveira.pdf   # plano de trabalho (banco de dados/pipeline)
+├── PLANO_DE_TRABALHO_IC_-_ESTER_FRANCA_SIMENES_...pdf   # plano de trabalho (indicadores epidemiológicos)
+└── PROJETO_IC_ALUNO_-_NAYLLA_...pdf         # plano de trabalho (projeto distinto, mesma orientadora)
 ```
 
 À medida que o pipeline e o modelo forem implementados, este README será atualizado com as instruções de execução (ambiente, dependências, arquivo de configuração e como rodar o treinamento/avaliação).
@@ -105,3 +117,10 @@ Sifilis congenita/
 - SOMMERVILLE, I. *Engenharia de Software*. 10. ed. São Paulo: Pearson, 2019.
 - ALURA. *O que é engenharia de dados*. 2023.
 - ACCURATE. *Engenharia de dados e sua importância para BI e BA*. 2024.
+- BRASIL. Ministério da Saúde. *Boletim Epidemiológico — Sífilis 2021*. Brasília: MS, 2021.
+- BRASIL. Ministério da Saúde. Secretaria de Vigilância em Saúde. *Caderno de Análise — Roteiro para uso do SINAN Net, análise da qualidade da base de dados e cálculo de indicadores epidemiológicos e operacionais*. Brasília: MS, 2019.
+- DOMINGUES, C. S. B. et al. Protocolo Brasileiro para Infecções Sexualmente Transmissíveis 2020: sífilis congênita e criança exposta à sífilis. *Epidemiologia e Serviços de Saúde*, v. 30, spe1, e2020597, 2021.
+- MAURINA, E. et al. Perfil epidemiológico dos casos notificados de Sífilis Congênita na Cidade de Caxias do Sul/RS. *Revista Eletrônica Acervo Saúde*, v. 25, n. 1, 2025.
+- MONTEIRO NETA, A. M. S. et al. Sífilis gestacional e congênita: limitações na completude dos registros de notificação. *ARevis7*, v. 7, n. 11, 2025.
+- SOARES, M. A. S.; AQUINO, R. Completude e caracterização dos registros de sífilis gestacional e congênita na Bahia, 2007-2017. *Epidemiologia e Serviços de Saúde*, v. 30, n. 4, 2021.
+- TEIXEIRA, K. K. S. et al. Qualidade dos dados do sistema de vigilância epidemiológica de sífilis congênita. *Journal of Human Growth and Development*, v. 35, n. 2, p. 210-220, 2025.
