@@ -1,0 +1,28 @@
+# Dependências do projeto, com as versões testadas em 2026-10-20
+# (Python 3.14.7, Windows 11, ambiente virtual .venv).
+# Instalação: pip install -r requirements.txt
+
+# Leitura e tratamento dos dados
+pandas==3.0.6
+numpy==2.5.4
+pyarrow==26.0.0
+
+# Modelagem e balanceamento de classes
+scikit-learn==1.9.1
+imbalanced-learn==0.14.2
+
+# Gráficos
+matplotlib==3.11.2
+seaborn==0.13.2
+
+# Arquivo de configuração externo (config/*.yaml)
+pyyaml==6.0.3
+
+# Notebooks
+jupyter==1.1.1
+
+# Opcional: conversão dos arquivos .dbc do DATASUS para CSV.
+# O pyreaddbc não tem versão pronta para Windows e precisa do
+# "Microsoft C++ Build Tools" para compilar. Só é necessário para
+# baixar dados novos; os CSVs atuais já estão convertidos.
+# Instalação à parte: pip install pyreaddbc

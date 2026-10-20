@@ -3,7 +3,7 @@
 > Documento de referência técnica completo do projeto. O [README.md](README.md) é a porta de entrada resumida; este arquivo detalha contexto, metodologia, arquitetura, dados e cronograma para quem for efetivamente implementar, revisar ou dar continuidade ao projeto.
 
 **Última atualização:** 2026-10-20
-**Versão do documento:** 1.4 (ver [histórico de revisões](#21-histórico-de-revisões))
+**Versão do documento:** 1.5 (ver [histórico de revisões](#21-histórico-de-revisões))
 **Status do projeto:** Fase de planejamento e organização inicial dos dados (nenhum código de pipeline/modelagem implementado ainda; dados brutos inspecionados, perfilados e carregados num painel do Power BI)
 
 **Guia rápido de leitura:** objetivo e escopo → [seção 4](#4-objetivos) · como obter e ler os dados → [6.2](#62-como-obter-os-dados) e [6.3](#63-como-usar-os-dados-leitura-correta-em-python) · estrutura e ambiente Python → [seção 13](#13-estrutura-de-repositório-e-organização-de-arquivos) · ferramentas → [13.1](#131-ferramentas-do-projeto) · decisões já tomadas e próximos passos → [seção 20](#20-roadmap-técnico--próximos-passos).
@@ -265,7 +265,7 @@ Os microdados ficam no **FTP público do DATASUS** (`ftp.datasus.gov.br`), no fo
 **Passo a passo para baixar e converter**
 
 1. Baixe os `.dbc` pelo navegador ou por um cliente FTP (ex.: FileZilla, servidor `ftp.datasus.gov.br`, acesso anônimo). O FTP do DATASUS pode bloquear acessos de fora do Brasil.
-2. Converta `.dbc` → tabela com a biblioteca Python [`pyreaddbc`](https://pypi.org/project/pyreaddbc/) (alternativas: TabWin do próprio DATASUS, ou o pacote `read.dbc` no R):
+2. Converta `.dbc` → tabela com a biblioteca Python [`pyreaddbc`](https://pypi.org/project/pyreaddbc/) (alternativas: TabWin do próprio DATASUS, ou o pacote `read.dbc` no R). No Windows, o `pyreaddbc` precisa do "Microsoft C++ Build Tools" para instalar, por isso fica fora do `requirements.txt` ([seção 13.2](#132-configurando-o-ambiente-python)):
 
    ```python
    import pyreaddbc
@@ -274,7 +274,7 @@ Os microdados ficam no **FTP público do DATASUS** (`ftp.datasus.gov.br`), no fo
    df.to_csv("SIFCBR24.csv", index=False)   # ou df.to_parquet(...) para arquivos menores e mais rápidos
    ```
 
-3. Coloque os arquivos na pasta de dados brutos (hoje, a raiz do projeto; na estrutura prevista, `data/raw/`; ver [seção 13](#13-estrutura-de-repositório-e-organização-de-arquivos)). **Nunca** versione esses arquivos no Git.
+3. Coloque os arquivos na pasta de dados brutos `data/raw/` do repositório (ver [seção 13](#13-estrutura-de-repositório-e-organização-de-arquivos)). **Nunca** versione esses arquivos no Git.
 
 ### 6.3 Como usar os dados (leitura correta em Python)
 
@@ -598,74 +598,86 @@ Dado que o problema é uma **classificação binária desbalanceada** (caso conf
 
 ## 13. Estrutura de repositório e organização de arquivos
 
-**Estado atual:**
+O projeto existe em dois lugares, com papéis diferentes:
+
+| Onde | O que é | Versionado? |
+|---|---|---|
+| **Repositório Git** ([`EduardaRab/S-filis-Cong-nita-ML`](https://github.com/EduardaRab/S-filis-Cong-nita-ML)) | Código, configuração, documentação e a estrutura de pastas do projeto | Sim |
+| **Pasta de trabalho local** (com os CSVs, PDFs e o painel do Power BI) | Dados brutos, planos de trabalho com dados pessoais, artigo, exportações `.docx`/`.pdf` e o BI | Não (dados e PDFs ficam fora do Git) |
+
+**Estrutura do repositório** (criada em 2026-10-20):
 
 ```
-Sifilis congenita/
-├── README.md
-├── DOCUMENTACAO_TECNICA.md      # este arquivo (fonte oficial da documentação)
-├── Documentacao_Tecnica_Sifilis_Congenita.docx / .pdf   # versões exportadas deste .md (regenerar a cada revisão)
-├── Artigo_Cientifico_Modelo_Preditivo_Sifilis_Congenita.pdf  # artigo metodológico (não versionado; *.pdf no .gitignore)
-├── requirements.txt             # dependências Python (ver seção 13.2)
-├── ROTEIRO_POWER_BI.md          # modelo do painel no Power BI e roteiro das páginas
-├── Projeto_Sifilis_BI.pbip      # abre o BI no Power BI Desktop (Projeto do Power BI)
-├── Projeto_Sifilis_BI.SemanticModel/  # modelo do BI em texto (TMDL), versionável
-├── Projeto_Sifilis_BI.Report/         # páginas/visuais do BI, versionável
-├── .gitignore
-├── DNSP2015.csv ... DNSP2024.csv        # SINASC-SP bruto, 10 arquivos (não versionado)
-├── SIFCBR15.csv ... SIFCBR25.csv        # SINAN-BR bruto, 11 arquivos, 2025 parcial (não versionado)
-├── Lucas_-_Plano_de_Trabalho_...pdf     # não versionado (dado pessoal)
-├── Plano_de_trabalho_Eduarda_Oliveira.pdf  # não versionado (dado pessoal)
-├── PLANO_DE_TRABALHO_IC_-_ESTER_FRANCA_SIMENES_...pdf   # não versionado (dado pessoal)
-├── PROJETO_IC_ALUNO_-_NAYLLA_GABRIELY_SILVA_FERNANDES...pdf   # não versionado (dado pessoal)
-└── Microsoft.Services.Store.winmd       # ⚠ arquivo do Windows sem relação com o projeto; remover (não está no .gitignore)
+S-filis-Cong-nita-ML/
+├── README.md                  # porta de entrada: equipe, dados, primeiros passos, estrutura
+├── DOCUMENTACAO_TECNICA.md    # este arquivo (fonte oficial da documentação)
+├── requirements.txt           # dependências Python com versões testadas (seção 13.2)
+├── .gitignore                 # dados, PDFs, ambiente virtual, cache do Power BI fora do Git
+├── data/                      # conteúdo NÃO versionado; pastas mantidas por .gitkeep
+│   ├── README.md              # regras de uso das pastas de dados
+│   ├── raw/                   # originais do DATASUS, sem alteração (DNSP*.csv, SIFCBR*.csv, .dbc)
+│   ├── processed/             # dados tratados pelo pipeline, prontos para modelagem (Parquet)
+│   └── outputs/               # resultados: métricas, modelos treinados, tabelas, figuras, relatórios
+├── src/                       # código-fonte Python (ver src/README.md)
+├── notebooks/                 # notebooks Jupyter de análise exploratória
+└── config/                    # YAML de configuração externa (experimentos e indicadores)
 ```
 
+Regras:
+
+- **`data/raw/` é somente leitura:** os arquivos originais nunca são editados; qualquer correção é gravada em `data/processed/`.
+- **Nenhum dado vai para o Git:** o `.gitignore` ignora o conteúdo de `data/raw/`, `data/processed/` e `data/outputs/` (exceto os `.gitkeep`) e qualquer `*.csv`, `*.dbc`, `*.dbf`, `*.parquet`, `*.feather`, `*.pkl` e `*.joblib` em outras pastas. Testado em 2026-10-20 com arquivos fictícios em cada pasta.
+- **Configuração fora do código:** algoritmos, variáveis, hiperparâmetros, indicadores e limiares ficam em `config/`, nunca fixos em `src/`.
+- Cada pasta tem um `README.md` explicando o que vai nela e quem grava.
+
+**Organização prevista dentro das pastas** (a validar com a equipe quando a implementação começar):
+
+```
+config/
+├── experimentos/*.yaml        # algoritmo, features, hiperparâmetros, balanceamento, validação (Lucas)
+└── indicadores.yaml           # indicadores agregados e limiares de alerta (Ester)
+src/
+├── pipeline/                  # ETL/ELT: extract.py, transform.py, load.py (Eduarda)
+├── modeling/                  # train.py, evaluate.py, interpret.py (Lucas)
+└── shared/                    # utilitários comuns: leitura dos CSVs, schemas, logging
+data/outputs/
+├── experimentos/              # métricas e modelos de cada execução (um subdiretório por experimento)
+└── relatorios/                # documento técnico de indicadores e relatório de completude (Ester), figuras
+tests/                         # testes automatizados do pipeline e da modelagem (a criar)
+```
+
+**Pasta de trabalho local** (estado atual, fora do Git):
+
+```
+Projeto Sifiliz/
+├── DOCUMENTACAO_TECNICA.md + Documentacao_Tecnica_Sifilis_Congenita.docx / .pdf   # exportações (regenerar a cada revisão)
+├── README.md, requirements.txt                       # cópias do repositório
+├── ROTEIRO_POWER_BI.md                               # modelo do painel no Power BI e roteiro das páginas
+├── Projeto_Sifilis_BI.pbip + .SemanticModel/ + .Report/   # painel do Power BI (lê os CSVs desta pasta)
+├── DNSP2015.csv ... DNSP2024.csv                     # SINASC-SP bruto, 10 arquivos
+├── SIFCBR15.csv ... SIFCBR25.csv                     # SINAN-BR bruto, 11 arquivos, 2025 parcial
+├── Artigo_Cientifico_Modelo_Preditivo_Sifilis_Congenita.pdf   # artigo metodológico
+├── planos de trabalho em PDF (Lucas, Eduarda, Ester, Naylla)  # contêm dados pessoais; nunca versionar
+└── Microsoft.Services.Store.winmd                    # ⚠ arquivo do Windows sem relação com o projeto; remover
+```
+
+> Para trabalhar com o código, copie os CSVs para `data/raw/` dentro do repositório clonado. Se o painel do Power BI passar a ler de lá, basta alterar o parâmetro `PastaProjeto` (ver [ROTEIRO_POWER_BI.md](ROTEIRO_POWER_BI.md)).
+>
 > Nenhum código (`.py`/notebook) foi implementado até esta revisão.
-
-**Estrutura prevista quando a implementação começar** (sugestão, a validar com a equipe):
-
-```
-Sifilis congenita/
-├── README.md
-├── DOCUMENTACAO_TECNICA.md
-├── .gitignore
-├── config/
-│   ├── experimentos/*.yaml        # arquivos de configuração externa (Lucas)
-│   └── indicadores.yaml           # indicadores agregados e limiares de alerta (Ester)
-├── data/
-│   ├── raw/                       # CSVs originais (ignorado no git)
-│   ├── interim/                   # dados parcialmente tratados
-│   └── processed/                 # dataset final pronto para modelagem
-├── src/
-│   ├── pipeline/                  # ETL/ELT (Eduarda)
-│   │   ├── extract.py
-│   │   ├── transform.py
-│   │   └── load.py
-│   ├── modeling/                  # treino/avaliação (Lucas)
-│   │   ├── train.py
-│   │   ├── evaluate.py
-│   │   └── interpret.py
-│   └── shared/                    # utilitários comuns (schemas, logging)
-├── notebooks/                     # análises exploratórias
-├── reports/                       # relatórios parciais/final, figuras, documento técnico de indicadores e relatório de completude (Ester)
-├── tests/                         # testes automatizados do pipeline e da modelagem
-└── requirements.txt / environment.yml
-```
 
 ### 13.1 Ferramentas do projeto
 
 | Ferramenta | Uso no projeto | Situação |
 |---|---|---|
-| **Python 3.12** | Linguagem do pipeline e da modelagem | Definido |
-| `pandas`, `numpy` | Leitura e tratamento dos dados | Definido (`requirements.txt`) |
-| `scikit-learn` | Algoritmos de classificação, validação cruzada, métricas | Definido |
-| `imbalanced-learn` | Balanceamento de classes (SMOTE, undersampling) | Definido |
-| `matplotlib`, `seaborn` | Gráficos da análise exploratória e dos relatórios | Definido |
-| `pyyaml` | Leitura do arquivo de configuração externo (`config/*.yaml`) | Definido |
-| `jupyter` | Notebooks de análise exploratória | Definido |
-| `pyreaddbc` | Conversão dos `.dbc` do DATASUS ([seção 6.2](#62-como-obter-os-dados)) | Definido |
-| `pyarrow` | Gravar/ler Parquet (dados intermediários menores e mais rápidos) | Definido |
+| **Python 3.14** | Linguagem do pipeline e da modelagem | Definido e testado (3.14.7) |
+| `pandas` 3.0.6, `numpy` 2.5.4 | Leitura e tratamento dos dados | Definido (`requirements.txt`) |
+| `pyarrow` 26.0.0 | Gravar/ler Parquet em `data/processed/` | Definido |
+| `scikit-learn` 1.9.1 | Algoritmos de classificação, validação cruzada, métricas | Definido |
+| `imbalanced-learn` 0.14.2 | Balanceamento de classes (SMOTE, undersampling) | Definido |
+| `matplotlib` 3.11.2, `seaborn` 0.13.2 | Gráficos da análise exploratória e dos relatórios | Definido |
+| `pyyaml` 6.0.3 | Leitura do arquivo de configuração externo (`config/*.yaml`) | Definido |
+| `jupyter` 1.1.1 | Notebooks de análise exploratória | Definido |
+| `pyreaddbc` | Conversão dos `.dbc` do DATASUS ([seção 6.2](#62-como-obter-os-dados)) | **Opcional**, fora do `requirements.txt`: no Windows precisa do "Microsoft C++ Build Tools" para compilar |
 | **PyCharm** | IDE do projeto (configuração em `.idea/`, fora do Git) | Em uso |
 | **Power BI Desktop** | Painel exploratório dos dados ([ROTEIRO_POWER_BI.md](ROTEIRO_POWER_BI.md)) | Em uso |
 | **Git + GitHub** | Versionamento ([seção 14](#14-controle-de-versão-e-fluxo-de-trabalho-git)) | Em uso |
@@ -673,23 +685,29 @@ Sifilis congenita/
 
 ### 13.2 Configurando o ambiente Python
 
-Passo a passo para quem vai rodar o projeto pela primeira vez (Windows):
+Passo a passo para quem vai rodar o projeto pela primeira vez (Windows). Testado em 2026-10-20 com Python 3.14.7: instalação completa e leitura dos CSVs reais conferida com a [seção 6.1](#61-perfil-real-dos-dados-verificado-nos-arquivos) (258.372 notificações, 42.262 residentes em SP, 470.887 nascidos vivos em 2024).
 
-1. **Instalar o Python 3.12** pelo [python.org](https://www.python.org/downloads/), marcando **"Add python.exe to PATH"** na instalação. Conferir no terminal:
+1. **Instalar o Python 3.14** pelo [python.org](https://www.python.org/downloads/), marcando **"Add python.exe to PATH"** na instalação. Conferir no terminal:
 
    ```bash
    python --version
    ```
 
-   > No Windows, se `python` abrir a Microsoft Store ou der erro, o Python não está instalado de verdade: é só o atalho da Store. Desative em *Configurações → Aplicativos → Aliases de execução de aplicativo*.
+   > No Windows, se `python` abrir a Microsoft Store ou der erro, o Python não está instalado de verdade: é só o atalho da Store. Desative em *Configurações → Aplicativos → Aliases de execução de aplicativo*. O lançador `py -3.14` também funciona.
 
-2. **Criar o ambiente virtual** na pasta do projeto (a pasta `.venv/` já está no `.gitignore`):
+2. **Clonar o repositório** e entrar na pasta:
+
+   ```bash
+   git clone https://github.com/EduardaRab/S-filis-Cong-nita-ML.git
+   ```
+
+3. **Criar o ambiente virtual** dentro do repositório (a pasta `.venv/` está no `.gitignore`):
 
    ```bash
    python -m venv .venv
    ```
 
-3. **Ativar o ambiente** (PowerShell):
+4. **Ativar o ambiente** (PowerShell):
 
    ```bash
    .venv\Scripts\Activate.ps1
@@ -697,17 +715,23 @@ Passo a passo para quem vai rodar o projeto pela primeira vez (Windows):
 
    > Se o PowerShell bloquear o script, rode uma vez `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
 
-4. **Instalar as dependências:**
+5. **Instalar as dependências** (versões fixadas):
 
    ```bash
    pip install -r requirements.txt
    ```
 
-5. **No PyCharm:** *Settings → Project → Python Interpreter → Add Interpreter → Existing* → selecionar `.venv\Scripts\python.exe`. Os notebooks Jupyter rodam direto no PyCharm com esse interpretador.
+   > O `pyreaddbc` não está no `requirements.txt`: no Windows ele não tem versão pronta e a instalação falha sem o "Microsoft C++ Build Tools". Só é preciso para converter `.dbc` novos; alternativas: TabWin do DATASUS ou o pacote `read.dbc` no R.
 
-6. **Testar a leitura dos dados** com o exemplo da [seção 6.3](#63-como-usar-os-dados-leitura-correta-em-python) e conferir as contagens com a [seção 6.1](#61-perfil-real-dos-dados-verificado-nos-arquivos).
+6. **Colocar os dados** (`DNSP*.csv` e `SIFCBR*.csv`) em `data/raw/`.
 
-> **Reprodutibilidade:** o `requirements.txt` ainda **não fixa versões**. Assim que o ambiente estiver funcionando, rodar `pip freeze > requirements.txt` e versionar o resultado, para todos usarem as mesmas versões (pendência na [seção 20](#20-roadmap-técnico--próximos-passos)).
+7. **No PyCharm:** *Settings → Project → Python Interpreter → Add Interpreter → Existing* → selecionar `.venv\Scripts\python.exe`. Os notebooks Jupyter rodam direto no PyCharm com esse interpretador.
+
+8. **Testar a leitura dos dados** com o exemplo da [seção 6.3](#63-como-usar-os-dados-leitura-correta-em-python), usando `PASTA = Path("data/raw")`, e conferir as contagens com a [seção 6.1](#61-perfil-real-dos-dados-verificado-nos-arquivos).
+
+> **Reprodutibilidade:** o `requirements.txt` fixa a versão das bibliotecas usadas diretamente pelo projeto. Ao adicionar uma biblioteca nova, instale, teste e acrescente a linha com a versão (`pip show <pacote>` mostra a versão instalada).
+>
+> **Atenção ao pandas 3.0:** ele mudou alguns comportamentos padrão em relação ao 2.x (por exemplo, o tipo `str` passou a ser o padrão para texto e o *copy-on-write* está sempre ativo). O exemplo da seção 6.3 foi testado e funciona; código copiado de tutoriais antigos pode precisar de ajustes.
 
 ## 14. Controle de versão e fluxo de trabalho Git
 
@@ -841,7 +865,10 @@ Os cronogramas dos três planos de trabalho do projeto são **idênticos em peri
 - [ ] Decidir o tratamento dos 17.784 casos de aborto/natimorto por sífilis (sem registro no SINASC) na definição do rótulo do modelo.
 - [ ] Validar os domínios de código de cada campo contra o dicionário oficial vigente do DATASUS/SINAN para os anos 2015–2025.
 - [x] Stack técnica inicial: Python com `pandas`, `numpy`, `scikit-learn`, `imbalanced-learn`, `matplotlib`, `seaborn`, `pyyaml`, `jupyter` (ver `requirements.txt`).
-- [ ] Fixar versões no `requirements.txt` (hoje sem versão, o que compromete a reprodutibilidade) e definir o formato do banco de dados tratado.
+- [x] Organizar a estrutura do repositório (`data/raw`, `data/processed`, `data/outputs`, `src`, `notebooks`, `config`), revisar o `.gitignore` e testar a instalação em ambiente virtual: feito na v1.5 ([seção 13](#13-estrutura-de-repositório-e-organização-de-arquivos)).
+- [x] Fixar versões no `requirements.txt`: feito na v1.5, com as versões testadas no Python 3.14.7.
+- [ ] Definir o formato do banco de dados tratado (frente da Eduarda).
+- [ ] Copiar os CSVs para `data/raw/` do repositório clonado e, se for o caso, apontar o parâmetro `PastaProjeto` do Power BI para lá.
 - [ ] Remover `Microsoft.Services.Store.winmd` da pasta do projeto.
 - [ ] Corrigir a referência KOURENTZES (ano 2014) no artigo científico.
 - [ ] Definir com a orientadora as datas das entregas da frente epidemiológica (revisão sistemática, completude do SINAN, indicadores e limiares, documento técnico), que não estão no cronograma do plano da Ester.
@@ -859,3 +886,4 @@ Os cronogramas dos três planos de trabalho do projeto são **idênticos em peri
 | 1.2 | 2026-10-20 | Nova [4.3 Escopo](#43-escopo) (dentro/fora/em aberto); nova [6.2](#62-como-obter-os-dados) com caminhos do FTP do DATASUS conferidos (SINAN Sífilis Congênita é **todo preliminar**; SINASC-SP 2025 disponível como preliminar) e conversão `.dbc`; nova [6.3](#63-como-usar-os-dados-leitura-correta-em-python) com regras e exemplo de leitura em Python; total do SINAN corrigido para 258.372 (registro com quebra de linha em `SIFCBR20`); novas [13.1 Ferramentas](#131-ferramentas-do-projeto) e [13.2 Ambiente Python](#132-configurando-o-ambiente-python); `pyreaddbc` e `pyarrow` adicionados ao `requirements.txt`; nova 20.1 com as decisões já tomadas; roadmap reorganizado. |
 | 1.3 | 2026-10-20 | Revisão de gestão: descrição de `ANTSIFIL_N` corrigida (é o **momento do diagnóstico da sífilis materna**, não "gestação anterior"); [6.1](#61-perfil-real-dos-dados-verificado-nos-arquivos) ganhou a distribuição do diagnóstico final e o alerta de que **17.784 casos de aborto/natimorto não existem no SINASC**; [8.1](#81-observações-importantes-sobre-o-sifcbr) ganhou o alerta de **viés pela definição de caso** (tratamento materno adequado é baixo entre casos por construção); Etapa 3 e roadmap atualizados; `.docx`/`.pdf` regenerados a partir desta versão; coluna RA removida da seção 1 (o documento passou a ser versionado em repositório público). |
 | 1.4 | 2026-10-20 | Inclusão de **todos os participantes**: Ester França Simenes (terceiro plano de trabalho, fundamentação epidemiológica) e Naylla Gabriely Silva Fernandes (projeto relacionado, coautora do artigo) nas seções 1, 3 (novas 3.3 e 3.4; diagrama de dependência), 4.2, 5, 9 (novas Etapas 2.1 e 7.1), 13, 14, 15, 16 (coluna da Ester e cronograma da Naylla), 17, 18, 19 e 20; travessões removidos do texto. |
+| 1.5 | 2026-10-20 | Estrutura do repositório criada e documentada na [seção 13](#13-estrutura-de-repositório-e-organização-de-arquivos) (`data/raw`, `data/processed`, `data/outputs`, `src`, `notebooks`, `config`, cada uma com README); `.gitignore` revisado e testado; ambiente virtual testado com Python 3.14.7 (leitura dos CSVs reais conferida); versões fixadas no `requirements.txt`; `pyreaddbc` passou a ser opcional (não instala no Windows sem compilador C++); seções 6.2, 13.1, 13.2 e 20 atualizadas. |

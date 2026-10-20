@@ -1,15 +1,40 @@
-# Dados brutos do DATASUS (arquivos grandes, não versionar)
-*.csv
+# ---------------------------------------------------------------
+# Dados: nenhum arquivo de dados vai para o Git.
+# As pastas ficam versionadas pelos .gitkeep e pelo data/README.md.
+# ---------------------------------------------------------------
+data/raw/*
+data/processed/*
+data/outputs/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/outputs/.gitkeep
 
-# Documentos com dados pessoais sensíveis (CPF, RG, endereço, telefone)
+# Dados brutos ou derivados soltos em qualquer outra pasta
+*.csv
+*.dbc
+*.dbf
+*.parquet
+*.feather
+*.pkl
+*.joblib
+
+# Documentos com dados pessoais (planos de trabalho com CPF, RG, endereço, telefone)
 *.pdf
 
 # Ambiente Python
 __pycache__/
-*.pyc
+*.py[cod]
 .venv/
 venv/
 env/
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Power BI: o .pbip e as pastas *.SemanticModel/ e *.Report/ são versionados;
+# o cache de dados e as configurações locais não
+*.pbix
+**/.pbi/cache.abf
+**/.pbi/localSettings.json
 
 # IDE
 .vscode/
@@ -18,6 +43,7 @@ env/
 # Sistema operacional
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Configuração local / segredos
 .env
