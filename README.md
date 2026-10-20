@@ -120,6 +120,7 @@ Detalhes e solução de problemas: [seção 13.2 da documentação técnica](DOC
 S-filis-Cong-nita-ML/
 ├── README.md                  # este arquivo
 ├── DOCUMENTACAO_TECNICA.md    # documentação técnica completa (fonte oficial)
+├── ROTEIRO_POWER_BI.md        # modelo e páginas do painel do Power BI (o painel fica na pasta local)
 ├── requirements.txt           # dependências Python com versões testadas
 ├── .gitignore                 # o que fica fora do Git (dados, PDFs, ambiente, cache)
 ├── data/                      # dados (conteúdo NÃO versionado; ver data/README.md)

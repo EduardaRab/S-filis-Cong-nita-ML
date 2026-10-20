@@ -611,6 +611,7 @@ O projeto existe em dois lugares, com papéis diferentes:
 S-filis-Cong-nita-ML/
 ├── README.md                  # porta de entrada: equipe, dados, primeiros passos, estrutura
 ├── DOCUMENTACAO_TECNICA.md    # este arquivo (fonte oficial da documentação)
+├── ROTEIRO_POWER_BI.md        # modelo e páginas do painel do Power BI (os arquivos do painel ficam na pasta local)
 ├── requirements.txt           # dependências Python com versões testadas (seção 13.2)
 ├── .gitignore                 # dados, PDFs, ambiente virtual, cache do Power BI fora do Git
 ├── data/                      # conteúdo NÃO versionado; pastas mantidas por .gitkeep
