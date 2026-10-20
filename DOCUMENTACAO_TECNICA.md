@@ -3,7 +3,7 @@
 > Documento de referência técnica completo do projeto. O [README.md](README.md) é a porta de entrada resumida; este arquivo detalha contexto, metodologia, arquitetura, dados e cronograma para quem for efetivamente implementar, revisar ou dar continuidade ao projeto.
 
 **Última atualização:** 2026-10-20
-**Versão do documento:** 1.3 (ver [histórico de revisões](#21-histórico-de-revisões))
+**Versão do documento:** 1.4 (ver [histórico de revisões](#21-histórico-de-revisões))
 **Status do projeto:** Fase de planejamento e organização inicial dos dados (nenhum código de pipeline/modelagem implementado ainda; dados brutos inspecionados, perfilados e carregados num painel do Power BI)
 
 **Guia rápido de leitura:** objetivo e escopo → [seção 4](#4-objetivos) · como obter e ler os dados → [6.2](#62-como-obter-os-dados) e [6.3](#63-como-usar-os-dados-leitura-correta-em-python) · estrutura e ambiente Python → [seção 13](#13-estrutura-de-repositório-e-organização-de-arquivos) · ferramentas → [13.1](#131-ferramentas-do-projeto) · decisões já tomadas e próximos passos → [seção 20](#20-roadmap-técnico--próximos-passos).
@@ -14,7 +14,7 @@
 
 1. [Contexto institucional](#1-contexto-institucional)
 2. [Problema e motivação](#2-problema-e-motivação)
-3. [Estrutura do projeto: dois planos de trabalho](#3-estrutura-do-projeto-dois-planos-de-trabalho)
+3. [Estrutura do projeto: planos de trabalho](#3-estrutura-do-projeto-planos-de-trabalho)
 4. [Objetivos](#4-objetivos)
 5. [Fundamentação teórica](#5-fundamentação-teórica)
 6. [Fontes de dados](#6-fontes-de-dados)
@@ -46,14 +46,18 @@
 | Coordenadora | Profª Dra. Grace Miriam de Almeida Pfaffenbach |
 | Colaboradora | Profª Msc. Débora Meyhofer Ferreira |
 | Data de assinatura dos planos de trabalho | 23 de abril de 2026 |
-| Área estratégica USF | Ensino e aprendizagem, avaliação e tecnologias educacionais; Tecnologia, inovação e empreendedorismo |
+| Área estratégica USF | Ensino e aprendizagem, avaliação e tecnologias educacionais; Tecnologia, inovação e empreendedorismo (planos de Lucas e Eduarda); Saúde, tecnologia e qualidade de vida (planos de Ester e Naylla) |
 
-O projeto é conduzido por **dois alunos de IC**, cada um com um plano de trabalho formalmente distinto, submetido e assinado separadamente, mas que compõem uma única pesquisa integrada:
+> No formulário do plano da Ester, o projeto guarda-chuva aparece com o título *"API Configurável para Predição de Sífilis Congênita: Integração de Modelagem Computacional e Fundamentos Epidemiológicos em Arquitetura Adaptável por Configuração Externa"*. Os dois títulos se referem à mesma pesquisa.
+
+O projeto é conduzido por **três alunos de IC**, cada um com um plano de trabalho formalmente distinto, submetido e assinado separadamente, mas que compõem uma única pesquisa integrada. Uma quarta aluna, da mesma orientadora, desenvolve um plano de um projeto relacionado e é coautora do artigo do grupo:
 
 | Aluno(a) | Curso | Campus | Semestre | Foco do plano de trabalho |
 |---|---|---|---|---|
 | Lucas Marques Custodio | Engenharia da Computação | Itatiba | 4º | Modelo preditivo (Machine Learning) |
 | Eduarda Rabelo Oliveira | Engenharia da Computação | Sagrado | 5º | Engenharia de dados / pipeline / banco de dados |
+| Ester França Simenes | Enfermagem | Sagrado Coração (Campinas) | 7º | Fundamentação epidemiológica: indicadores agregados e limiares de alerta que calibram o arquivo de configuração |
+| Naylla Gabriely Silva Fernandes | Enfermagem | Sagrado Coração (Campinas) | 7º | Projeto relacionado: telemonitoramento para apoio ao aleitamento materno e cuidados com o recém-nascido (ver [3.4](#34-plano-de-trabalho-relacionado-naylla-gabriely-silva-fernandes)) |
 
 > Dados pessoais dos planos de trabalho (RA, CPF, RG, endereço, telefone) foram **deliberadamente omitidos** deste documento e não devem ser incluídos em nenhum arquivo versionado no Git (ver [seção 15](#15-considerações-éticas-legais-e-de-privacidade)).
 
@@ -72,7 +76,7 @@ Apesar disso, o Brasil mantém taxas de incidência persistentemente altas, o qu
 
 **Hipótese de trabalho do projeto:** cruzando variáveis sociodemográficas e assistenciais disponíveis publicamente (idade materna, escolaridade, número de consultas de pré-natal, tipo de parto, raça/cor, região de residência etc.) com os registros de notificação de sífilis congênita, é possível treinar um modelo de classificação capaz de estimar o **risco/propensão** de um caso associado a determinado perfil, servindo como ferramenta de apoio à vigilância epidemiológica, e não como ferramenta de diagnóstico clínico individual.
 
-## 3. Estrutura do projeto: dois planos de trabalho
+## 3. Estrutura do projeto: planos de trabalho
 
 ### 3.1 Plano de trabalho 1: "Desenvolvimento de Modelo Preditivo com Arquitetura Adaptável para Sífilis Congênita" (Lucas Marques Custodio)
 
@@ -82,15 +86,26 @@ Foco: a camada de **ciência de dados e machine learning** propriamente dita: mo
 
 Foco: a camada de **engenharia de dados**: pipeline ETL/ELT que extrai as bases brutas do DATASUS/SINAN, trata inconsistências e valores ausentes, padroniza variáveis e carrega o resultado em um banco de dados estruturado (relacional ou analítico), que serve de insumo para o plano de trabalho do Lucas.
 
-### 3.3 Relação de dependência entre os dois planos
+### 3.3 Plano de trabalho 3: "Calibração Contextual de API Preditiva de Sífilis Congênita a partir de Dados Agregados de Vigilância: Fundamentos Epidemiológicos para Arquivo de Configuração" (Ester França Simenes)
+
+Foco: a **fundamentação epidemiológica** do sistema. A frente de Enfermagem traduz dados coletivos de vigilância em parâmetros configuráveis: revisão sistemática de fatores de risco populacionais para sífilis congênita, análise de completude e consistência das variáveis do SINAN (2015–2025) para a região de abrangência (Bragança Paulista, Itatiba e Campinas) e definição de 5 a 7 indicadores agregados (ex.: cobertura de pré-natal adequado, tratamento de parceiros, cobertura de testagem rápida, vulnerabilidade social, oportunidade da notificação) com limiares de alerta verde/amarelo/vermelho. O produto é um **documento técnico** que orienta o preenchimento do arquivo de configuração.
+
+### 3.4 Plano de trabalho relacionado (Naylla Gabriely Silva Fernandes)
+
+"Telemonitoramento para Apoio ao Aleitamento Materno e Cuidados com o Recém-Nascido nos Primeiros Seis Meses de Vida". É um projeto de pesquisa **distinto**, da mesma coordenadora, que o próprio plano descreve como complementar ao projeto guarda-chuva. Prevê o acompanhamento remoto (contatos quinzenais) de 20 puérperas de áreas vulneráveis de Bragança Paulista até o sexto mês do bebê, avaliando a taxa de aleitamento materno exclusivo aos 4 e 6 meses, a satisfação das puérperas e a redução de consultas não programadas. Não usa as bases DATASUS deste projeto, mas compartilha o grupo de pesquisa, a orientação e a coautoria do artigo metodológico ([seção 17](#17-produção-científica-esperada)).
+
+### 3.5 Relação de dependência entre os planos
 
 ```
  SINASC (DNSP)  ──┐
                   ├──▶  [ Pipeline ETL/ELT ]  ──▶  [ Banco de dados tratado ]  ──▶  [ Modelagem ML ]  ──▶  Modelo + avaliação + interpretabilidade
  SINAN  (SIFCBR)──┘        (Eduarda)                  (saída da Eduarda)            (Lucas)
+                                                                                           ▲
+                  [ Indicadores agregados e limiares de alerta ] ──────────────────────────┘
+                            (Ester)
 ```
 
-Ou seja: **o trabalho da Eduarda é pré-requisito de dados para o trabalho do Lucas.** A "arquitetura adaptável por configuração externa" é um conceito compartilhado pelos dois planos, mas aplicado em camadas diferentes: ela na composição do pipeline de tratamento de dados, ele na seleção de algoritmo/variáveis/hiperparâmetros de modelagem.
+Ou seja: **o trabalho da Eduarda é pré-requisito de dados para o trabalho do Lucas**, e **o trabalho da Ester fornece os indicadores e limiares, ancorados na literatura e nas metas do Ministério da Saúde, que calibram o arquivo de configuração do modelo**. A "arquitetura adaptável por configuração externa" é um conceito compartilhado pelos três planos, mas aplicado em camadas diferentes: a Eduarda na composição do pipeline de tratamento de dados, o Lucas na seleção de algoritmo/variáveis/hiperparâmetros de modelagem e a Ester no conteúdo epidemiológico (indicadores e limiares) do arquivo de configuração.
 
 ## 4. Objetivos
 
@@ -98,7 +113,7 @@ Ou seja: **o trabalho da Eduarda é pré-requisito de dados para o trabalho do L
 
 Desenvolver e avaliar um modelo preditivo baseado em técnicas de aprendizado de máquina, com arquitetura modular adaptável por configuração externa, capaz de estimar o risco de ocorrência de sífilis congênita a partir de dados epidemiológicos públicos, apoiado por um pipeline de engenharia de dados que garanta a qualidade e a integridade das informações utilizadas.
 
-### 4.2 Objetivos específicos (consolidados dos dois planos)
+### 4.2 Objetivos específicos (consolidados dos planos)
 
 **Bibliográficos / conceituais**
 - Levantamento bibliográfico sobre sífilis congênita, fatores de risco associados, e aplicações de ciência de dados / engenharia de dados / aprendizado de máquina em saúde (bases: Scopus, Web of Science, IEEE Xplore, Google Scholar).
@@ -120,6 +135,13 @@ Desenvolver e avaliar um modelo preditivo baseado em técnicas de aprendizado de
 - Aplicar técnicas de interpretabilidade (importância de variáveis).
 - Analisar resultados à luz do contexto epidemiológico.
 - Documentar o sistema e os resultados, produzindo relatórios técnicos e, se possível, publicação científica.
+
+**Fundamentação epidemiológica (Ester)**
+- Realizar revisão sistemática da literatura (PubMed, SciELO e LILACS, 2015–2025; descritores "congenital syphilis", "risk factors", "population-based", "indicators"; qualidade avaliada pelo checklist STROBE) para identificar fatores de risco populacionais para sífilis congênita.
+- Analisar a completude e a consistência das variáveis do SINAN (2015–2025) para a região de abrangência (Bragança Paulista, Itatiba e Campinas), com a classificação do Ministério da Saúde: excelente (≥95%), bom (90–95%), regular (70–90%), ruim (50–70%) e muito ruim (<50%).
+- Selecionar um conjunto de indicadores agregados (mínimo de cinco) com base em relevância, disponibilidade e qualidade dos dados.
+- Propor limiares de alerta (verde, amarelo, vermelho) para cada indicador, com base em metas do Ministério da Saúde e na literatura (ex.: pré-natal adequado abaixo de 60% = alerta vermelho).
+- Elaborar o documento técnico com indicadores, limiares e justificativas para uso no arquivo de configuração.
 
 ### 4.3 Escopo
 
@@ -146,12 +168,13 @@ Desenvolver e avaliar um modelo preditivo baseado em técnicas de aprendizado de
 
 ## 5. Fundamentação teórica
 
-Resumo dos principais pontos levantados na introdução dos dois planos de trabalho, que devem orientar a revisão de literatura:
+Resumo dos principais pontos levantados na introdução dos planos de trabalho (Lucas, Eduarda e Ester) e do artigo metodológico, que devem orientar a revisão de literatura:
 
 - **Sistemas de informação em saúde no Brasil** (DATASUS, SINAN) disponibilizam grandes volumes de dados epidemiológicos sobre sífilis, incluindo variáveis sociodemográficas, clínicas e de pré-natal, uma base relevante para ferramentas analíticas de predição de risco (BRASIL, 2022).
 - **Machine learning em saúde pública**: técnicas de ciência de dados identificam padrões complexos e não lineares que métodos estatísticos tradicionais frequentemente não capturam (KOURENTZES; BARROW; CRONE, 2014), e modelos preditivos já são amplamente usados para apoio à decisão clínica/epidemiológica e estratificação de risco (OBERMEYER; EMANUEL, 2016).
 - **Desafio de flexibilidade estrutural**: sistemas preditivos tradicionais costumam ter baixa flexibilidade para se adaptar a novas bases, novos algoritmos ou novos hiperparâmetros. Daí a proposta de uma arquitetura modular e configurável, alinhada a princípios de engenharia de software (SOMMERVILLE, 2019).
 - **Engenharia de dados como fundação**: a qualidade de qualquer modelo preditivo depende diretamente da qualidade do dado que o alimenta; pipelines ETL/ELT bem estruturados garantem confiabilidade, escalabilidade e reprodutibilidade (ALURA, 2023; ACCURATE, 2024).
+- **Sífilis congênita como evento sentinela** (frente da Ester): sua ocorrência indica falhas no rastreamento, diagnóstico, tratamento ou seguimento da gestante e do parceiro (DOMINGUES et al., 2021). Mesmo com cobertura de pré-natal acima de 80%, persistem falhas de testagem e de tratamento do parceiro (MAURINA et al., 2025), e as fichas de notificação têm alta incompletude em escolaridade materna, tratamento do parceiro e diagnóstico clínico da criança (MONTEIRO NETA et al., 2025). Indicadores agregados (territoriais), como proporção de gestantes com 6 ou mais consultas, tratamento adequado de gestantes, parceiros tratados, cobertura da Estratégia Saúde da Família e índice de vulnerabilidade social, são preditores potenciais da incidência em nível populacional (SOARES; AQUINO, 2021; TEIXEIRA et al., 2025).
 
 > Esta seção deve ser expandida durante a fase de revisão bibliográfica (Ago–Out/2026) com achados específicos sobre: (a) fatores de risco já descritos na literatura para sífilis congênita, (b) trabalhos anteriores que aplicaram ML a dados do SINASC/SINAN, e (c) técnicas de record linkage entre bases de saúde pública brasileiras sem identificador único compartilhado.
 
@@ -441,8 +464,8 @@ Com base no objetivo do projeto (fatores de risco assistenciais/sociodemográfic
 
 ## 9. Metodologia detalhada
 
-### Etapa 0: Revisão bibliográfica e definição de escopo (ambos)
-Levantamento em Scopus, Web of Science, IEEE Xplore, Google Scholar. Saída esperada: síntese de fatores de risco já descritos na literatura + decisão formal sobre a estratégia de linkage entre SINASC e SINAN (individual vs. agregada).
+### Etapa 0: Revisão bibliográfica e definição de escopo (todos)
+Levantamento em Scopus, Web of Science, IEEE Xplore e Google Scholar (Lucas e Eduarda) e revisão sistemática em PubMed, SciELO e LILACS com checklist STROBE (Ester). Saída esperada: síntese de fatores de risco já descritos na literatura + decisão formal sobre a estratégia de linkage entre SINASC e SINAN (individual vs. agregada).
 
 ### Etapa 1: Ingestão (Eduarda)
 Leitura dos arquivos CSV brutos ano a ano, validação de schema **lendo as colunas por nome, não por posição** (há diferenças reais de layout entre anos: `contador`/`CONTADOR` em posições distintas no SINASC 2015/2017 e a coluna extra `DT_NASC` no SINAN 2023; ver [seção 6.1](#61-perfil-real-dos-dados-verificado-nos-arquivos)), padronização dos formatos de data (`DDMMAAAA` no SINASC vs. ISO no SINAN), preservação de zeros à esquerda nos códigos, e consolidação em um dataset único por sistema (SINASC-SP consolidado 2015–2024; SINAN-BR consolidado 2015–2025, com 2025 marcado como ano parcial).
@@ -452,6 +475,9 @@ Leitura dos arquivos CSV brutos ano a ano, validação de schema **lendo as colu
 - Padronização de tipos (datas, códigos numéricos vs. categóricos).
 - Remoção/flag de duplicidades.
 - Padronização de domínios de código entre anos (ex.: mudanças de codificação de escolaridade).
+
+### Etapa 2.1: Análise de completude e consistência do SINAN (Ester)
+Cálculo da proporção de campos preenchidos (completude) e de inconsistências (ex.: óbito sem data) nas variáveis do SINAN de 2015 a 2025, para os municípios da região de abrangência (Bragança Paulista, Itatiba e Campinas), com a classificação do Ministério da Saúde (BRASIL, 2019). Variáveis prioritárias: escolaridade da mãe, realização de pré-natal, tratamento da mãe, tratamento do parceiro e diagnóstico clínico da criança. Saída: relatório de completude e consistência, que também orienta o tratamento de valores ausentes no pré-processamento (Etapa 5). A página "Qualidade dos dados" do painel do Power BI já calcula essa completude para o Brasil inteiro, por ano e UF.
 
 ### Etapa 3: Integração SINASC + SINAN (Eduarda + Lucas, decisão conjunta)
 Definição e implementação da estratégia de linkage (ver [seção 6](#6-fontes-de-dados)). **Pré-requisito obrigatório:** restringir o SINAN a residentes em SP (`SG_UF = 35`), já que o SINASC disponível cobre apenas SP. **Atenção:** os casos de aborto e natimorto por sífilis (`EVO_DIAG_N` 3 e 4, ~6,9% do SINAN) não têm Declaração de Nascido Vivo e, portanto, nunca serão encontrados no SINASC. É preciso decidir se saem do rótulo ou são analisados à parte (ver [6.1](#61-perfil-real-dos-dados-verificado-nos-arquivos)). Se for optado por record linkage individual: aplicar chave composta (município de residência + data de nascimento/data de referência + faixas de idade) com técnica probabilística; se optado por abordagem ecológica: agregar ambas as bases por município × período (ex. município × ano) para construir taxas.
@@ -478,13 +504,16 @@ Implementação de um arquivo de configuração externo (formato sugerido: YAML 
 
 Ver proposta de estrutura em [seção 10](#10-arquitetura-do-sistema-proposta).
 
+### Etapa 7.1: Indicadores agregados e limiares de alerta (Ester)
+Com base na revisão sistemática (Etapa 0) e na análise de completude (Etapa 2.1), seleção de um painel de 5 a 7 indicadores agregados (ex.: proporção de gestantes com pré-natal adequado, taxa de tratamento de parceiros, cobertura de testagem rápida, índice de vulnerabilidade social, oportunidade da notificação), cada um com descrição, fonte, periodicidade de atualização e limiares de alerta verde/amarelo/vermelho, ancorados em metas do Ministério da Saúde e na literatura (SOARES; AQUINO, 2021; TEIXEIRA et al., 2025). O documento técnico resultante é validado internamente pelos pesquisadores e orienta o preenchimento do arquivo de configuração (ex.: um bloco `indicadores` no YAML).
+
 ### Etapa 8: Avaliação (Lucas)
 Cálculo das métricas da [seção 12](#12-métricas-de-avaliação) para cada algoritmo/configuração testada, com registro estruturado dos experimentos (idealmente um log/tabela de execução, em que cada linha = uma configuração testada + métricas obtidas).
 
 ### Etapa 9: Interpretabilidade (Lucas)
 Importância de variáveis (ex.: feature importance nativa de Random Forest, coeficientes padronizados da Regressão Logística, ou técnicas agnósticas como permutation importance / SHAP).
 
-### Etapa 10: Documentação e publicação (ambos)
+### Etapa 10: Documentação e publicação (todos)
 Relatórios parciais e final, atualização deste documento e do README, preparação de artigo científico.
 
 ## 10. Arquitetura do sistema (proposta)
@@ -587,12 +616,14 @@ Sifilis congenita/
 ├── SIFCBR15.csv ... SIFCBR25.csv        # SINAN-BR bruto, 11 arquivos, 2025 parcial (não versionado)
 ├── Lucas_-_Plano_de_Trabalho_...pdf     # não versionado (dado pessoal)
 ├── Plano_de_trabalho_Eduarda_Oliveira.pdf  # não versionado (dado pessoal)
+├── PLANO_DE_TRABALHO_IC_-_ESTER_FRANCA_SIMENES_...pdf   # não versionado (dado pessoal)
+├── PROJETO_IC_ALUNO_-_NAYLLA_GABRIELY_SILVA_FERNANDES...pdf   # não versionado (dado pessoal)
 └── Microsoft.Services.Store.winmd       # ⚠ arquivo do Windows sem relação com o projeto; remover (não está no .gitignore)
 ```
 
 > Nenhum código (`.py`/notebook) foi implementado até esta revisão.
 
-**Estrutura prevista quando a implementação começar** (sugestão, a validar com a Eduarda):
+**Estrutura prevista quando a implementação começar** (sugestão, a validar com a equipe):
 
 ```
 Sifilis congenita/
@@ -600,7 +631,8 @@ Sifilis congenita/
 ├── DOCUMENTACAO_TECNICA.md
 ├── .gitignore
 ├── config/
-│   └── experimentos/*.yaml        # arquivos de configuração externa (Lucas)
+│   ├── experimentos/*.yaml        # arquivos de configuração externa (Lucas)
+│   └── indicadores.yaml           # indicadores agregados e limiares de alerta (Ester)
 ├── data/
 │   ├── raw/                       # CSVs originais (ignorado no git)
 │   ├── interim/                   # dados parcialmente tratados
@@ -616,7 +648,7 @@ Sifilis congenita/
 │   │   └── interpret.py
 │   └── shared/                    # utilitários comuns (schemas, logging)
 ├── notebooks/                     # análises exploratórias
-├── reports/                       # relatórios parciais/final, figuras
+├── reports/                       # relatórios parciais/final, figuras, documento técnico de indicadores e relatório de completude (Ester)
 ├── tests/                         # testes automatizados do pipeline e da modelagem
 └── requirements.txt / environment.yml
 ```
@@ -681,32 +713,51 @@ Passo a passo para quem vai rodar o projeto pela primeira vez (Windows):
 
 - **Repositório remoto:** `https://github.com/EduardaRab/S-filis-Cong-nita-ML` (branch principal: `main`).
 - **`.gitignore` atual exclui:** todos os `*.csv` (dados brutos, grandes demais e não devem ser versionados) e todos os `*.pdf` (planos de trabalho, contêm CPF/RG/endereço/telefone).
-- **Recomendação de fluxo:** usar branches por funcionalidade (ex.: `feature/pipeline-etl`, `feature/modelo-baseline`) e abrir Pull Request para `main`, já que o repositório é compartilhado entre os dois alunos. Isso evita sobrescrever trabalho um do outro, o que já ocorreu uma vez no histórico inicial (commit automático do GitHub precisou ser mesclado manualmente).
+- **Recomendação de fluxo:** usar branches por funcionalidade (ex.: `feature/pipeline-etl`, `feature/modelo-baseline`) e abrir Pull Request para `main`, já que o repositório é compartilhado pela equipe. Isso evita sobrescrever trabalho um do outro, o que já ocorreu uma vez no histórico inicial (commit automático do GitHub precisou ser mesclado manualmente).
 - **Dados grandes:** se em algum momento for necessário versionar uma amostra de dados ou o dataset processado, considerar Git LFS (Large File Storage) em vez de commitar diretamente, ou hospedar em um storage externo (ex.: Google Drive institucional) referenciado no README.
 
 ## 15. Considerações éticas, legais e de privacidade
 
 - Os dados do SINASC e do SINAN utilizados são **públicos e agregados/anonimizados** pelo DATASUS e não contêm nome, CPF ou outro identificador direto de paciente.
 - Ainda assim, por se tratar de **dados de saúde** (categoria sensível segundo a LGPD, Lei nº 13.709/2018), o tratamento deve seguir boas práticas de minimização (usar apenas as variáveis necessárias ao objetivo do estudo) e de segurança (não republicar os microdados brutos fora dos canais oficiais do DATASUS).
-- **Os planos de trabalho em PDF contêm dados pessoais diretos dos dois alunos** (CPF, RG, endereço residencial, telefone); por isso foram excluídos do controle de versão via `.gitignore` e não devem ser anexados a nenhum relatório público, artigo ou repositório aberto.
+- **Os planos de trabalho em PDF contêm dados pessoais diretos de Lucas, Eduarda, Ester e Naylla** (RA, CPF, RG, endereço residencial, telefone); por isso foram excluídos do controle de versão via `.gitignore` e não devem ser anexados a nenhum relatório público, artigo ou repositório aberto.
 - Qualquer publicação científica decorrente do projeto deve reportar resultados de forma agregada (nunca a nível de caso individual identificável).
 
 ## 16. Cronograma detalhado
 
-Os cronogramas dos dois planos de trabalho são **idênticos em periodização**, refletindo que as duas frentes avançam em paralelo e se retroalimentam:
+Os cronogramas dos três planos de trabalho do projeto são **idênticos em periodização**, refletindo que as frentes avançam em paralelo e se retroalimentam:
 
-| Período | Frente de Engenharia de Dados (Eduarda) | Frente de Modelagem (Lucas) |
-|---|---|---|
-| **Ago–Out/2026** | Levantamento bibliográfico; estudo de ETL/ELT, modelagem de dados e qualidade da informação; compreensão das bases DATASUS/SINAN; planejamento da arquitetura do pipeline. | Levantamento bibliográfico; estudo de modelagem preditiva e análise de dados; compreensão das bases públicas; planejamento da arquitetura do sistema. |
-| **Nov/2026–Jan/2027** | Ingestão e tratamento dos dados (limpeza, valores ausentes, padronização); implementação inicial do pipeline ETL; análises exploratórias de qualidade dos dados. | Pré-processamento dos dados; análise exploratória para identificação de padrões; implementação inicial do pipeline e dos primeiros modelos; testes iniciais de treinamento/validação. |
-| **Fev–Abr/2027** | Automação e melhoria do pipeline; modelagem e implementação do banco de dados estruturado; validações e regras de qualidade; disponibilização da base para consumo analítico; **apresentação de resultados parciais em evento de IC**. | Ajuste de parâmetros e comparação entre algoritmos; implementação da arquitetura adaptável por configuração externa; testes robustos de desempenho; **apresentação de resultados parciais em evento de IC**. |
-| **Mai–Jul/2027** | Finalização do pipeline e da estrutura do banco de dados; testes finais de consistência/desempenho/reprodutibilidade; relatório final; preparação de artigo científico. | Finalização do modelo preditivo; validação do sistema; ajustes finais na arquitetura; relatório final; preparação de artigo científico. |
+| Período | Frente de Engenharia de Dados (Eduarda) | Frente de Modelagem (Lucas) | Frente Epidemiológica (Ester) |
+|---|---|---|---|
+| **Ago–Out/2026** | Levantamento bibliográfico; estudo de ETL/ELT, modelagem de dados e qualidade da informação; compreensão das bases DATASUS/SINAN; planejamento da arquitetura do pipeline. | Levantamento bibliográfico; estudo de modelagem preditiva e análise de dados; compreensão das bases públicas; planejamento da arquitetura do sistema. | Levantamento bibliográfico sobre sífilis congênita e aplicações de aprendizado de máquina na saúde; estudo dos conceitos básicos de modelagem preditiva e análise de dados; compreensão das bases públicas e definição das variáveis de interesse; planejamento da arquitetura do sistema e organização das etapas. |
+| **Nov/2026–Jan/2027** | Ingestão e tratamento dos dados (limpeza, valores ausentes, padronização); implementação inicial do pipeline ETL; análises exploratórias de qualidade dos dados. | Pré-processamento dos dados; análise exploratória para identificação de padrões; implementação inicial do pipeline e dos primeiros modelos; testes iniciais de treinamento/validação. | Pré-processamento dos dados (limpeza, valores ausentes, padronização); análise exploratória para identificação de padrões; implementação inicial do pipeline e dos primeiros modelos; testes iniciais de treinamento e validação. |
+| **Fev–Abr/2027** | Automação e melhoria do pipeline; modelagem e implementação do banco de dados estruturado; validações e regras de qualidade; disponibilização da base para consumo analítico; **apresentação de resultados parciais em evento de IC**. | Ajuste de parâmetros e comparação entre algoritmos; implementação da arquitetura adaptável por configuração externa; testes robustos de desempenho; **apresentação de resultados parciais em evento de IC**. | Ajuste de parâmetros e comparação entre algoritmos; implementação da arquitetura adaptável por configuração externa; testes e avaliação de desempenho dos modelos; **apresentação de resultados parciais em evento de IC**. |
+| **Mai–Jul/2027** | Finalização do pipeline e da estrutura do banco de dados; testes finais de consistência/desempenho/reprodutibilidade; relatório final; preparação de artigo científico. | Finalização do modelo preditivo; validação do sistema; ajustes finais na arquitetura; relatório final; preparação de artigo científico. | Finalização do modelo preditivo e validação do sistema; ajustes finais na arquitetura e análise dos resultados; relatório final; preparação de artigo científico; divulgação dos resultados à comunidade acadêmica. |
+
+> **Sobre a coluna da Ester:** o cronograma do plano dela repete, período a período, as atividades gerais do projeto (praticamente as mesmas da frente de modelagem; a tabela acima segue esse texto). As entregas próprias da frente epidemiológica (revisão sistemática, análise de completude do SINAN, painel de 5 a 7 indicadores com limiares e documento técnico; ver Etapas 2.1 e 7.1) **não têm data definida no plano** e devem ser distribuídas nesses períodos com a orientadora (pendência na [seção 20](#20-roadmap-técnico--próximos-passos)).
+
+**Projeto relacionado (Naylla, telemonitoramento)**, conforme o cronograma do plano dela:
+
+| Atividade | Período |
+|---|---|
+| Revisão de literatura e primeira versão do roteiro de telemonitoramento | Ago–Set/2026 |
+| Submissão e aprovação do projeto no CEP-USF | Ago–Set/2026 |
+| Validação do roteiro com especialistas (2 rodadas) | Set–Out/2026 |
+| Recrutamento das mães | Nov/2026–Jan/2027 |
+| Acompanhamento das mães e bebês | Nov/2026–Mai/2027 |
+| Relatório parcial | Dez/2026 |
+| Versão final dos materiais (cartilha digital) | Mai–Jun/2027 |
+| Encontro de IC da USF | 14 a 16/05/2027 |
+| Relatório final | Jun/2027 |
+| Redação e submissão do artigo científico | Fev–Jul/2027 |
 
 ## 17. Produção científica esperada
 
 - Relatórios parciais e relatório final de IC (um conjunto por aluno, conforme exigência do edital).
-- Apresentação de resultados parciais em evento de iniciação científica da USF (Fev–Abr/2027).
-- **Artigo metodológico já redigido:** *"Modelo preditivo de sífilis congênita com arquitetura adaptável por configuração externa: uma proposta metodológica integrando engenharia de dados, aprendizado de máquina e vigilância epidemiológica"* (`Artigo_Cientifico_Modelo_Preditivo_Sifilis_Congenita.pdf`, 10 p.). Descreve o delineamento, sem resultados empíricos. Antes de submeter, alinhar com os achados da [seção 6.1](#61-perfil-real-dos-dados-verificado-nos-arquivos) (abrangência SP × Brasil) e corrigir a referência KOURENTZES.
+- Apresentação de resultados parciais em evento de iniciação científica da USF (Fev–Abr/2027; o plano da Naylla registra o Encontro de IC da USF em 14 a 16/05/2027).
+- **Frente epidemiológica (Ester):** documento técnico com 5 a 7 indicadores agregados (descrição, fonte, periodicidade e limiares de alerta), entregue à equipe de Engenharia; relatório de análise de completude e consistência das variáveis do SINAN; submissão de artigo de revisão ou original para periódico de saúde coletiva; pôster no Encontro de IC da USF.
+- **Projeto relacionado (Naylla):** artigo para periódico de enfermagem ou saúde coletiva; resumo e pôster no Encontro de IC da USF; cartilha digital com orientações para puérperas (entregável para as UBS).
+- **Artigo metodológico já redigido:** *"Modelo preditivo de sífilis congênita com arquitetura adaptável por configuração externa: uma proposta metodológica integrando engenharia de dados, aprendizado de máquina e vigilância epidemiológica"* (`Artigo_Cientifico_Modelo_Preditivo_Sifilis_Congenita.pdf`, 10 p.), de autoria de Lucas Marques Custodio, Eduarda Rabelo Oliveira, Ester França Simenes, Naylla Gabriely Silva Fernandes, Débora Meyhofer Ferreira e Grace Miriam de Almeida Pfaffenbach. Descreve o delineamento, sem resultados empíricos. Antes de submeter, alinhar com os achados da [seção 6.1](#61-perfil-real-dos-dados-verificado-nos-arquivos) (abrangência SP × Brasil) e corrigir a referência KOURENTZES.
 - Preparação de artigo científico com resultados empíricos para submissão em periódico ou congresso da área (ao final do projeto, Mai–Jul/2027).
 - Potencial de continuidade: novas aplicações de engenharia de dados/ML em saúde pública a partir da base construída.
 
@@ -729,6 +780,10 @@ Os cronogramas dos dois planos de trabalho são **idênticos em periodização**
 | **Índice de Kotelchuck** | Índice validado que mede a adequação do início e da quantidade de consultas de pré-natal |
 | **Classificação de Robson** | Sistema que classifica partos em 10 grupos, usado para análise de indicações de cesárea |
 | **LGPD** | Lei Geral de Proteção de Dados (Lei nº 13.709/2018) |
+| **Evento sentinela** | Ocorrência que sinaliza falha do sistema de saúde; a sífilis congênita indica falhas no rastreamento, diagnóstico ou tratamento no pré-natal |
+| **Completude** | Proporção de registros com um campo preenchido; o Ministério da Saúde classifica em excelente (≥95%), bom, regular, ruim e muito ruim (<50%) |
+| **Limiar de alerta** | Valor de corte de um indicador que define as faixas verde, amarela e vermelha (frente da Ester) |
+| **STROBE** | Checklist internacional para avaliar a qualidade de estudos observacionais, usado na revisão sistemática |
 | **IC** | Iniciação Científica |
 
 ## 19. Referências bibliográficas
@@ -741,6 +796,15 @@ Os cronogramas dos dois planos de trabalho são **idênticos em periodização**
 - SOMMERVILLE, I. *Engenharia de Software*. 10. ed. São Paulo: Pearson, 2019.
 - ALURA. *O que é engenharia de dados*. 2023. Disponível em: https://www.alura.com.br/artigos/engenharia-dados
 - ACCURATE. *Engenharia de dados e sua importância para BI e BA*. 2024. Disponível em: https://blog.accurate.com.br/engenharia-de-dados/
+- BRASIL. Ministério da Saúde. *Boletim Epidemiológico: Sífilis 2021*. Brasília: MS, 2021.
+- BRASIL. Ministério da Saúde. Secretaria de Vigilância em Saúde. *Caderno de Análise: Roteiro para uso do SINAN Net, análise da qualidade da base de dados e cálculo de indicadores epidemiológicos e operacionais*. Brasília: MS, 2019.
+- DOMINGUES, C. S. B. et al. Protocolo Brasileiro para Infecções Sexualmente Transmissíveis 2020: sífilis congênita e criança exposta à sífilis. *Epidemiologia e Serviços de Saúde*, v. 30, spe1, e2020597, 2021.
+- MAURINA, E. et al. Perfil epidemiológico dos casos notificados de Sífilis Congênita na Cidade de Caxias do Sul/RS. *Revista Eletrônica Acervo Saúde*, v. 25, n. 1, 2025.
+- MONTEIRO NETA, A. M. S. et al. Sífilis gestacional e congênita: limitações na completude dos registros de notificação. *ARevis7*, v. 7, n. 11, 2025.
+- SOARES, M. A. S.; AQUINO, R. Completude e caracterização dos registros de sífilis gestacional e congênita na Bahia, 2007-2017. *Epidemiologia e Serviços de Saúde*, v. 30, n. 4, 2021.
+- TEIXEIRA, K. K. S. et al. Qualidade dos dados do sistema de vigilância epidemiológica de sífilis congênita. *Journal of Human Growth and Development*, v. 35, n. 2, p. 210-220, 2025.
+
+> As referências do plano da Naylla (telemonitoramento e aleitamento materno) estão no plano de trabalho dela e não são repetidas aqui, porque pertencem a outro projeto.
 
 ## 20. Roadmap técnico / próximos passos
 
@@ -780,6 +844,7 @@ Os cronogramas dos dois planos de trabalho são **idênticos em periodização**
 - [ ] Fixar versões no `requirements.txt` (hoje sem versão, o que compromete a reprodutibilidade) e definir o formato do banco de dados tratado.
 - [ ] Remover `Microsoft.Services.Store.winmd` da pasta do projeto.
 - [ ] Corrigir a referência KOURENTZES (ano 2014) no artigo científico.
+- [ ] Definir com a orientadora as datas das entregas da frente epidemiológica (revisão sistemática, completude do SINAN, indicadores e limiares, documento técnico), que não estão no cronograma do plano da Ester.
 - [ ] Implementar o pipeline ETL/ELT inicial (frente da Eduarda).
 - [ ] Implementar o primeiro modelo baseline (Regressão Logística) para validar o pipeline de ponta a ponta antes de partir para modelos mais complexos.
 - [ ] Especificar o schema definitivo do arquivo de configuração externo (formato YAML/JSON, campos obrigatórios).
@@ -793,3 +858,4 @@ Os cronogramas dos dois planos de trabalho são **idênticos em periodização**
 | 1.1 | 2026-10-14 | Revisão contra os arquivos reais: abrangência corrigida (SINASC = só SP; SINAN = Brasil); removida a falsa "lacuna de 2022" (`SIFCBR22.csv` existe); contagem de colunas corrigida (61 SINASC / 64 SINAN, 65 no SINAN 2023); nova [seção 6.1](#61-perfil-real-dos-dados-verificado-nos-arquivos) com volume por ano, diferenças de schema e formatos; `ID_AGRAVO`, `NU_IDADE_N` e `ESCMAE2010` corrigidos; referência KOURENTZES corrigida (2014); estrutura de repositório, produção científica e roadmap atualizados. |
 | 1.2 | 2026-10-20 | Nova [4.3 Escopo](#43-escopo) (dentro/fora/em aberto); nova [6.2](#62-como-obter-os-dados) com caminhos do FTP do DATASUS conferidos (SINAN Sífilis Congênita é **todo preliminar**; SINASC-SP 2025 disponível como preliminar) e conversão `.dbc`; nova [6.3](#63-como-usar-os-dados-leitura-correta-em-python) com regras e exemplo de leitura em Python; total do SINAN corrigido para 258.372 (registro com quebra de linha em `SIFCBR20`); novas [13.1 Ferramentas](#131-ferramentas-do-projeto) e [13.2 Ambiente Python](#132-configurando-o-ambiente-python); `pyreaddbc` e `pyarrow` adicionados ao `requirements.txt`; nova 20.1 com as decisões já tomadas; roadmap reorganizado. |
 | 1.3 | 2026-10-20 | Revisão de gestão: descrição de `ANTSIFIL_N` corrigida (é o **momento do diagnóstico da sífilis materna**, não "gestação anterior"); [6.1](#61-perfil-real-dos-dados-verificado-nos-arquivos) ganhou a distribuição do diagnóstico final e o alerta de que **17.784 casos de aborto/natimorto não existem no SINASC**; [8.1](#81-observações-importantes-sobre-o-sifcbr) ganhou o alerta de **viés pela definição de caso** (tratamento materno adequado é baixo entre casos por construção); Etapa 3 e roadmap atualizados; `.docx`/`.pdf` regenerados a partir desta versão; coluna RA removida da seção 1 (o documento passou a ser versionado em repositório público). |
+| 1.4 | 2026-10-20 | Inclusão de **todos os participantes**: Ester França Simenes (terceiro plano de trabalho, fundamentação epidemiológica) e Naylla Gabriely Silva Fernandes (projeto relacionado, coautora do artigo) nas seções 1, 3 (novas 3.3 e 3.4; diagrama de dependência), 4.2, 5, 9 (novas Etapas 2.1 e 7.1), 13, 14, 15, 16 (coluna da Ester e cronograma da Naylla), 17, 18, 19 e 20; travessões removidos do texto. |
